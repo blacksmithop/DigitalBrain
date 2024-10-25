@@ -6,7 +6,7 @@
       "examples": [
         {
           "title": "Introduction to Docker",
-          "code": "# Introduction to Docker\nDocker is an open platform for developing, shipping, and running applications.\n\nDocker provides the ability to package and run an application in a loosely isolated environment called a container. Here is an example of how to run a Docker container:\n\n```bash\n# Pull an image\n$ docker pull ubuntu\n\n# Run a container\n$ docker run -it ubuntu\n```\n\nContainers are lightweight and share the host OS kernel but run in isolation."
+          "code": "# Introduction to Docker\nDocker is an open platform for developing, shipping, and running applications.\n\nDocker provides the ability to package and run an application in a loosely isolated environment called a container. Here is an example of how to run a Docker container:\n\n```bash\n# Pull an image\n$ docker pull ubuntu\n\n# Run a container\n$ docker run -it ubuntu\n```\n\nContainers are lightweight and share the host OS kernel but run in iDsolation."
         },
         {
           "title": "Dockerfile Basics",
