@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const editorContainer = document.getElementById('editor-container');
     const titleInput = document.getElementById('title-input');
 
+    // Initialize SimpleMDE editor when 'Add' is clicked
     addButton.addEventListener('click', () => {
         if (!simplemde) {
             simplemde = new SimpleMDE({ element: document.getElementById("markdown-editor") });
@@ -12,20 +13,20 @@ document.addEventListener('DOMContentLoaded', () => {
         editorContainer.style.display = (editorContainer.style.display === 'none') ? 'block' : 'none';
     });
 
+    // Saving the markdown content
     const saveButton = document.getElementById('save-button');
     saveButton.addEventListener('click', () => {
         const title = titleInput.value;
-        const markdownContent = simplemde.value();
+        const markdownContent = simplemde.value(); // Get markdown content from editor
         if (title && markdownContent) {
             console.log("Saved Markdown Content: ", { title, code: markdownContent });
-            // Replace alert with proper UI response (could be a toast, etc.)
             titleInput.value = ''; // Clear the input after saving
             simplemde.value(''); // Clear the editor after saving
             editorContainer.style.display = 'none';
         }
     });
 
-    // Fetch knowledge base data from API using POST request
+    // Fetch knowledge base data
     function loadKnowledgeBase() {
         fetch('https://knowledge.abhinavkm.com/load_knowledge_data', {
             method: 'POST',
@@ -94,15 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return li;
     }
 
-    function toggleVisibility(element) {
-        element.classList.toggle('visible');
-    }
-
-    function toggleDescription(li, description) {
-        const descriptionDiv = li.querySelector('.description');
-        descriptionDiv.style.display = descriptionDiv.style.display === 'none' ? 'block' : 'none';
-    }
-
+    // Show modal with markdown code and copy button
     function showModal(title, code) {
         const modal = document.createElement('div');
         modal.classList.add('modal');
@@ -115,19 +108,17 @@ document.addEventListener('DOMContentLoaded', () => {
         closeButton.innerHTML = '&times;';
         closeButton.onclick = () => modal.remove();
 
+        // Render markdown content using 'marked' and assign to a <pre> block
         const pre = document.createElement('pre');
-        pre.innerHTML = marked(code); // Render the code from markdown
+        pre.innerHTML = marked(code); // Render markdown properly
 
-        // Create the "Copy" button as an icon
         const copyIcon = document.createElement('span');
         copyIcon.innerHTML = '📋';
         copyIcon.classList.add('copy-icon');
         copyIcon.onclick = () => {
             copyToClipboard(pre.innerText);
-            // Optionally, show a non-alert feedback
         };
 
-        // Append all the elements
         modalContent.appendChild(closeButton);
         modalContent.appendChild(copyIcon);
         modalContent.appendChild(pre);
@@ -135,7 +126,6 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.appendChild(modal);
     }
 
-    // Function to copy text to clipboard
     function copyToClipboard(text) {
         const textarea = document.createElement('textarea');
         textarea.value = text;
@@ -143,6 +133,17 @@ document.addEventListener('DOMContentLoaded', () => {
         textarea.select();
         document.execCommand('copy');
         document.body.removeChild(textarea);
+    }
+
+    // Toggle visibility of an element
+    function toggleVisibility(element) {
+        element.classList.toggle('visible');
+    }
+
+    // Toggle the description visibility
+    function toggleDescription(li, description) {
+        const descriptionDiv = li.querySelector('.description');
+        descriptionDiv.style.display = descriptionDiv.style.display === 'none' ? 'block' : 'none';
     }
 
     // Load the knowledge base data when the page loads

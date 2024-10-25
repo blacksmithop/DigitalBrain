@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Knowledge Base Directory</title>
+    <!-- SimpleMDE Markdown Editor -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+    <!-- Custom CSS for styling -->
     <link href="{{ url_for('static', path='/assets/css/styles.css') }}" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/3.0.4/marked.min.js"></script>
 </head>
 <body>
     <header>
@@ -46,6 +46,11 @@
         <p>© 2024 My Minimal Website</p>
     </footer>
 
+    <!-- SimpleMDE Markdown Editor Script -->
+    <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+    <!-- Marked.js Script for Markdown Parsing -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/3.0.4/marked.min.js"></script>
+    <!-- Custom JavaScript -->
     <script src="{{ url_for('static', path='/assets/js/script.js') }}"></script>
 </body>
 </html>
