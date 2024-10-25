@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Request
-from app import load_knowledge_data, Category, DeleteCategory
+
+from app import Category, DeleteCategory, load_knowledge_data
 
 router = APIRouter()
 
@@ -9,10 +10,12 @@ async def load_data(request: Request):
     dataset = load_knowledge_data()
     return dataset
 
+
 @router.post("/add_category", tags=["Knowledge"])
 async def add_category(payload: Category):
     print(f"Received payload for category {payload.name}")
     return 200
+
 
 @router.delete("/delete_category", tags=["Knowledge"])
 async def dlete_category(payload: DeleteCategory):

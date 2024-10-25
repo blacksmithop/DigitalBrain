@@ -1,9 +1,15 @@
 from pymongo import MongoClient
+
 from app.utils.models import Category, CategoryExample
 
 
 class MongoDBConnection:
-    def __init__(self, uri="mongodb://localhost:27017/", database_name="knowledge_base", collection_name="knowledge_base"):
+    def __init__(
+        self,
+        uri="mongodb://localhost:27017/",
+        database_name="knowledge_base",
+        collection_name="knowledge_base",
+    ):
         self.client = MongoClient(uri)
         self.db = self.client[database_name]
         self.collection = self.db[collection_name]
@@ -24,9 +30,7 @@ class MongoDBConnection:
             examples = entry.pop("examples")
             examples_pyd = [CategoryExample(**item) for item in examples]
 
-            category_entry = Category(
-                **entry, examples=examples_pyd
-            )
+            category_entry = Category(**entry, examples=examples_pyd)
             dataset_pyd[category].append(category_entry)
 
         return dataset_pyd

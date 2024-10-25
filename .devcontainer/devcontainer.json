@@ -1,0 +1,21 @@
+{
+	"name": "Digital Brain (Python 3)",
+	"build": {
+	        "dockerfile": "Dockerfile",
+	        "context": ".."
+    	},
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"djlynn03.add-to-git-ignore",
+				"ms-python.python",
+				"yzhang.markdown-all-in-one",
+				"ms-python.isort",
+				"ritwickdey.LiveServer",
+				"ecmel.vscode-html-css",
+				"codezombiech.gitignore",
+				"mikoz.black-py"
+			]
+		}
+	}
+}
