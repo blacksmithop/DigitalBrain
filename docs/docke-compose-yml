@@ -1,5 +1,5 @@
 services:
-  
+
   # Nginx 
   nginx:
     image: nginx:latest
@@ -25,6 +25,17 @@ services:
     restart: always
     expose:
       - "8001"  # Expose port 8001 for internal communication
+
+  # MongoDB
+  mongodb:
+    image: mongodb/mongodb-community-server:latest
+    pull_policy: always
+    container_name: mongodb
+    ports:
+      - "27017:27017"  # Expose MongoDB port to the host
+    networks:
+      - app_network
+    restart: always
 
 networks:
   app_network:

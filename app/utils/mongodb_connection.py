@@ -6,7 +6,7 @@ from app.utils.models import Category, CategoryExample
 class MongoDBConnection:
     def __init__(
         self,
-        uri="mongodb://localhost:27017/",
+        uri="mongodb://mongodb:27017/",
         database_name="knowledge_base",
         collection_name="knowledge_base",
     ):
