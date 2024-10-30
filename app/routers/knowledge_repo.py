@@ -1,10 +1,19 @@
 from fastapi import APIRouter, Request
-
+from fastapi.templating import Jinja2Templates
 from app import Category, DeleteCategory, MongoDB
 
 router = APIRouter()
+templates = Jinja2Templates(directory="templates")
 
 mongo = MongoDB()
+
+
+@router.get("/")
+async def index(request: Request):
+    dataset = mongo.get_domain_knowledge()
+    return templates.TemplateResponse(
+        request=request, name="index.html", context={"data": dataset}
+    )
 
 
 @router.post("/load_knowledge_data", tags=["Knowledge"])
