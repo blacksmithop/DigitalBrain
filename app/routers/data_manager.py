@@ -1,13 +1,15 @@
 from fastapi import APIRouter, Request
 
-from app import Category, DeleteCategory, load_knowledge_data
+from app import Category, DeleteCategory, MongoDB
 
 router = APIRouter()
+
+mongo = MongoDB()
 
 
 @router.post("/load_knowledge_data", tags=["Knowledge"])
 async def load_data(request: Request):
-    dataset = load_knowledge_data()
+    dataset = mongo.get_domain_knowledge()
     return dataset
 
 

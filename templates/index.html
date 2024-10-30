@@ -3,54 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Knowledge Base Directory</title>
-    <!-- SimpleMDE Markdown Editor -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+    <title>Knowledge Repo</title>
     <!-- Custom CSS for styling -->
     <link href="{{ url_for('static', path='/assets/css/styles.css') }}" rel="stylesheet">
 </head>
 <body>
     <header>
-        <div class="header-content">
-            <h1>Knowledge Base Directory</h1>
-            <div class="user-dropdown">
-                <div class="user-icon">👤</div>
-                <div class="dropdown-content">
-                    <a href="#">Logout</a>
-                </div>
-            </div>
-        </div>
     </header>
 
     <main>
-        <div class="container">
-            <div class="search-container">
-                <!-- Replaced "Add" with a plus icon -->
-                <button id="add-button" class="add-button">➕</button>
-                <input type="text" class="search-input" placeholder="Search...">
-                <button class="search-btn">🔍</button>
-            </div>
-
-            <div id="editor-container" style="display:none;">
-                <input type="text" id="title-input" placeholder="Enter title" class="title-input">
-                <textarea id="markdown-editor"></textarea>
-                <button id="preview-button" class="editor-btn">Preview</button>
-                <button id="save-button" class="editor-btn">Save</button>
-            </div>
-
-            <div id="knowledge-base"></div>
-        </div>
     </main>
 
     <footer>
-        <p>© 2024 My Minimal Website</p>
+        <p>Knowledge Repo</p>
     </footer>
-
-    <!-- SimpleMDE Markdown Editor Script -->
-    <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
-    <!-- Marked.js Script for Markdown Parsing -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/3.0.4/marked.min.js"></script>
-    <!-- Custom JavaScript -->
     <script src="{{ url_for('static', path='/assets/js/script.js') }}"></script>
 </body>
 </html>
