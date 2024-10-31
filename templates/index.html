@@ -1,47 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Knowledge Repo</title>
   <link href="{{ url_for('static', path='/assets/css/styles.css') }}" rel="stylesheet">
-  <script src="{{ url_for('static', path='/assets/js/script.js') }}"></script>
+  <link rel="icon" href="path-to-default-icon/favicon.ico"> <!-- Update with a default icon -->
 </head>
-<body>
 
+<body>
   <header>
     <h1>Knowledge Repo</h1>
+    <nav>
+      <button class="dropdown-btn">Menu ▼</button>
+      <div class="dropdown-content">
+        <a href="#source1">Source 1</a>
+        <a href="#source2">Source 2</a>
+        <a href="#source3">Source 3</a>
+      </div>
+    </nav>
   </header>
 
   <main>
-    {% for topic in data %}
-      <section>
-        <h2>{{ topic.name }}</h2>
-        <p>{{ topic.description }}</p>
-        
-        <div class="expander" onclick="toggleContent('examples-{{ loop.index }}')">Examples &#9662;</div>
-        <div id="examples-{{ loop.index }}" class="expander-content">
-          {% for example in topic.examples %}
-            <h3>{{ example.title }}</h3>
-            <div class="expander" onclick="toggleContent('code-{{ loop.index }}-{{ loop.index0 }}')">View Code &#9662;</div>
-            <div id="code-{{ loop.index }}-{{ loop.index0 }}" class="expander-content code-block">
-              <code>{{ example.code | safe }}</code>
-            </div>
-          {% endfor %}
-        </div>
-      </section>
-    {% endfor %}
+    <div class="search-container">
+      <button id="add-button">Add</button> <!-- New Add button -->
+      <input type="text" id="search-input" placeholder="Enter search query...">
+      <button id="search-button">Search</button>
+    </div>
+    <div id="search-results" class="hidden"></div>
   </main>
 
-  <footer>
-    <p>&copy; Abhinav KM</p>
-  </footer>
+  <!-- Modal for adding new categories -->
+  <div id="add-modal" class="modal hidden">
+    <div class="modal-content">
+      <span class="close-button">&times;</span>
+      <h2>Add New Category</h2>
+      <form id="add-category-form">
+        <label for="name">Name:</label>
+        <input type="text" id="name" required>
 
-  <script>
-    function toggleContent(id) {
-      const content = document.getElementById(id);
-      content.style.display = content.style.display === 'block' ? 'none' : 'block';
-    }
-  </script>
+        <label for="description">Description:</label>
+        <textarea id="description" required></textarea>
+
+        <label for="example">Example Code:</label>
+        <textarea id="example" required></textarea>
+
+        <label for="favicon">Favicon URL:</label>
+        <input type="url" id="favicon" placeholder="http://example.com/favicon.ico" required>
+
+        <button type="submit">Add Category</button>
+      </form>
+    </div>
+  </div>
+
+  <footer>
+    <p>Knowledge Repo © 2024</p>
+  </footer>
+  <script src="{{ url_for('static', path='/assets/js/script.js') }}"></script>
 </body>
+
 </html>
