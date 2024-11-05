@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Request
 from fastapi.templating import Jinja2Templates
-from app import Category, DeleteCategory, MongoDB
+from app import Category, AddCategory, DeleteCategory, MongoDB
 
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
@@ -23,12 +23,14 @@ async def load_data(request: Request):
 
 
 @router.post("/add_category", tags=["Knowledge"])
-async def add_category(payload: Category):
+async def add_category(payload: AddCategory):
     print(f"Received payload for category {payload.name}")
+    mongo.add_category(data=payload)
     return 200
 
 
 @router.delete("/delete_category", tags=["Knowledge"])
 async def dlete_category(payload: DeleteCategory):
     print(f"Deleting category {payload.id}")
+    mongo.delete_category(category_id=payload.id)
     return 200

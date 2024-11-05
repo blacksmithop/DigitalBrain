@@ -1,6 +1,6 @@
 services:
 
-  # # Nginx 
+  # Nginx 
   # nginx:
   #   image: nginx:latest
   #   pull_policy: always
@@ -16,7 +16,7 @@ services:
   # # Knowledge Repo
   # knowledge-repo:
   #   image: blacksmithop/knowledge_repo:latest
-  #   pull_policy: always
+  #   # pull_policy: always
   #   container_name: knowledge-repo
   #   ports:
   #     - "8001:8001"

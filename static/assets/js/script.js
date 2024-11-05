@@ -31,21 +31,50 @@ addModal.addEventListener("click", (event) => {
 });
 
 // Form submission for adding new category
-document.getElementById("add-category-form").addEventListener("submit", (e) => {
+document.getElementById("add-category-form").addEventListener("submit", async (e) => {
     e.preventDefault();
-    const newCategory = {
+    console.log("Form submission started");
+
+    // Build the payload
+    const payload = {
+        _id: Date.now().toString(), // Temporary unique ID for example
         name: document.getElementById("name").value,
         description: document.getElementById("description").value,
-        examples: [{ title: "Example", code: document.getElementById("example").value }],
-        favicon: document.getElementById("favicon").value
+        favicon: document.getElementById("favicon").value,
+        examples: [
+            {
+                title: "Example",
+                code: document.getElementById("example").value
+            }
+        ]
     };
-    console.log("New category added:", newCategory); // Mock adding
 
-    // Close modal
-    addModal.classList.remove("show-modal");
+    console.log("Payload to be sent:", payload);
+
+    try {
+        // Send data to the server
+        const response = await fetch("http://localhost:8080/load_knowledge_data", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(payload)
+        });
+
+        if (response.ok) {
+            console.log("Data successfully sent to /load_knowledge_data");
+            alert("Category added successfully!");
+            addModal.classList.remove("show-modal");
+            document.getElementById("add-category-form").reset();
+        } else {
+            console.error("Failed to add category. Status:", response.status);
+        }
+    } catch (error) {
+        console.error("Error adding category:", error);
+    }
 });
 
-// Mock search function with dummy data for testing
+// Perform search by fetching data from the API using POST request
 async function performSearch() {
     const query = searchInput.value.trim();
     if (!query) {
@@ -54,21 +83,30 @@ async function performSearch() {
         return;
     }
 
-    searchResults.innerHTML = `Searching for "${query}"...`;
-    searchResults.classList.add("show");
+    console.log("Performing search with query:", query);
 
-    const mockData = [
-        {
-            name: "Docker",
-            description: "Docker is a tool designed to make it easier to create, deploy, and run applications by using containers.",
-            icon: "https://www.docker.com/favicon.ico",
-            examples: [
-                { title: "Introduction to Docker", code: "docker pull ubuntu" },
-                { title: "Dockerfile Basics", code: "COPY package*.json ./" }
-            ]
+    try {
+        // POST request to load knowledge data
+        const response = await fetch("http://localhost:8080/load_knowledge_data", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ query }) // Sending the search query as part of the body
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            console.log("Data fetched from API:", data);
+            renderResults(data);
+        } else {
+            console.error("Failed to fetch data. Status:", response.status);
+            searchResults.innerHTML = "Failed to load data.";
         }
-    ];
-    renderResults(mockData);
+    } catch (error) {
+        console.error("Error fetching data:", error);
+        searchResults.innerHTML = "Error loading data.";
+    }
 }
 
 // Render search results with dropdown and collapsible examples
@@ -83,7 +121,7 @@ function renderResults(results) {
         // Icon
         const icon = document.createElement("img");
         icon.className = "result-icon";
-        icon.src = result.icon;
+        icon.src = result.favicon || "default-icon-path"; // Use a default icon if none provided
         icon.alt = `${result.name} icon`;
 
         // Content container

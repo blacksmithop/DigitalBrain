@@ -1,9 +1,14 @@
 from pymongo import MongoClient
+import urllib.parse
 from json import load
 from app.utils.models import Category, CategoryExample
+from bson import ObjectId
 
 DATABASE_NAME = "knowledge_repo"
 COLLECTION_NAME = "domain_specific"
+
+username = urllib.parse.quote_plus('root')
+password = urllib.parse.quote_plus('password')
 
 class MongoDB:
     def __init__(
@@ -39,21 +44,10 @@ class MongoDB:
     def get_domain_knowledge(self):
         data = self._fetch_data()
         return list(data) # use next for processing
-
-    # def load_data(self):
-    #     dataset = self.fetch_data()
-
-    #     dataset_pyd = {}
-
-    #     for entry in dataset:
-    #         category = entry.pop("category")
-    #         if category not in dataset_pyd:
-    #             dataset_pyd[category] = []
-
-    #         examples = entry.pop("examples")
-    #         examples_pyd = [CategoryExample(**item) for item in examples]
-
-    #         category_entry = Category(**entry, examples=examples_pyd)
-    #         dataset_pyd[category].append(category_entry)
-
-    #     return dataset_pyd
+    
+    def add_category(self, data: Category):
+        self.collection.insert_one(dict(data))
+        
+    def delete_category(self, category_id: str):
+        object_id = ObjectId(category_id)
+        self.collection.delete_one({"_id": ObjectId(object_id)})
