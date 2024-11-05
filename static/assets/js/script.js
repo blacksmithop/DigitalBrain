@@ -1,151 +1,197 @@
-document.addEventListener('DOMContentLoaded', () => {
-    let simplemde;
+// Dropdown Menu Toggle
+const dropdownBtn = document.querySelector(".dropdown-btn");
+const dropdownContent = document.querySelector(".dropdown-content");
 
-    const addButton = document.getElementById('add-button');
-    const editorContainer = document.getElementById('editor-container');
-    const titleInput = document.getElementById('title-input');
-
-    // Initialize SimpleMDE editor when 'Add' is clicked
-    addButton.addEventListener('click', () => {
-        if (!simplemde) {
-            simplemde = new SimpleMDE({ element: document.getElementById("markdown-editor") });
-        }
-        editorContainer.style.display = (editorContainer.style.display === 'none') ? 'block' : 'none';
-    });
-
-    // Saving the markdown content
-    const saveButton = document.getElementById('save-button');
-    saveButton.addEventListener('click', () => {
-        const title = titleInput.value;
-        const markdownContent = simplemde.value(); // Get markdown content from editor
-        if (title && markdownContent) {
-            console.log("Saved Markdown Content: ", { title, code: markdownContent });
-            titleInput.value = ''; // Clear the input after saving
-            simplemde.value(''); // Clear the editor after saving
-            editorContainer.style.display = 'none';
-        }
-    });
-
-    // Fetch knowledge base data
-    function loadKnowledgeBase() {
-        fetch('https://knowledge.abhinavkm.com/load_knowledge_data', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({})
-        })
-        .then(response => response.json())
-        .then(data => displayKnowledgeBase(data.DevOpsTools)) // Adjust according to response structure
-        .catch(error => console.error('Error loading knowledge base:', error));
-    }
-
-    // Generate the knowledge base structure
-    function displayKnowledgeBase(data) {
-        const baseContainer = document.getElementById('knowledge-base');
-        const ul = document.createElement('ul');
-        baseContainer.appendChild(ul);
-
-        data.forEach(category => {
-            const categoryLi = createExpandableItem(category.name, 'category', category.description);
-            ul.appendChild(categoryLi);
-
-            const examplesUl = document.createElement('ul');
-            examplesUl.classList.add('collapsible');
-
-            category.examples.forEach(example => {
-                const exampleLi = createExpandableItem(example.title, 'example', example.code);
-                examplesUl.appendChild(exampleLi);
-            });
-
-            categoryLi.appendChild(examplesUl);
-            categoryLi.querySelector('.expander').addEventListener('click', () => {
-                toggleVisibility(examplesUl);
-                toggleDescription(categoryLi, category.description); 
-            });
-        });
-    }
-
-    // Create expandable item
-    function createExpandableItem(name, type, content = null) {
-        const li = document.createElement('li');
-        const div = document.createElement('div');
-        div.classList.add('expander');
-
-        const icon = document.createElement('i');
-        icon.classList.add(type === 'category' ? 'fas' : 'far', 'fa-folder');
-        div.appendChild(icon);
-
-        const span = document.createElement('span');
-        span.textContent = name;
-        div.appendChild(span);
-
-        li.appendChild(div);
-
-        if (type === 'category') {
-            const descriptionDiv = document.createElement('div');
-            descriptionDiv.classList.add('description');
-            descriptionDiv.style.display = 'none';
-            descriptionDiv.textContent = content;
-            li.appendChild(descriptionDiv);
-        } else if (type === 'example') {
-            div.addEventListener('click', () => showModal(name, content));
-        }
-
-        return li;
-    }
-
-    // Show modal with markdown code and copy button
-    function showModal(title, code) {
-        const modal = document.createElement('div');
-        modal.classList.add('modal');
-        
-        const modalContent = document.createElement('div');
-        modalContent.classList.add('modal-content');
-
-        const closeButton = document.createElement('span');
-        closeButton.classList.add('close-button');
-        closeButton.innerHTML = '&times;';
-        closeButton.onclick = () => modal.remove();
-
-        // Render markdown content using 'marked' and assign to a <pre> block
-        const pre = document.createElement('pre');
-        pre.innerHTML = marked(code); // Render markdown properly
-
-        const copyIcon = document.createElement('span');
-        copyIcon.innerHTML = '📋';
-        copyIcon.classList.add('copy-icon');
-        copyIcon.onclick = () => {
-            copyToClipboard(pre.innerText);
-        };
-
-        modalContent.appendChild(closeButton);
-        modalContent.appendChild(copyIcon);
-        modalContent.appendChild(pre);
-        modal.appendChild(modalContent);
-        document.body.appendChild(modal);
-    }
-
-    function copyToClipboard(text) {
-        const textarea = document.createElement('textarea');
-        textarea.value = text;
-        document.body.appendChild(textarea);
-        textarea.select();
-        document.execCommand('copy');
-        document.body.removeChild(textarea);
-    }
-
-    // Toggle visibility of an element
-    function toggleVisibility(element) {
-        element.classList.toggle('visible');
-    }
-
-    // Toggle the description visibility
-    function toggleDescription(li, description) {
-        const descriptionDiv = li.querySelector('.description');
-        descriptionDiv.style.display = descriptionDiv.style.display === 'none' ? 'block' : 'none';
-    }
-
-    // Load the knowledge base data when the page loads
-    loadKnowledgeBase();
+dropdownBtn.addEventListener("click", () => {
+    dropdownContent.classList.toggle("show");
 });
+
+// Search Button Click and Animation
+const searchButton = document.getElementById("search-button");
+const searchInput = document.getElementById("search-input");
+const searchResults = document.getElementById("search-results");
+
+searchButton.addEventListener("click", () => performSearch());
+searchInput.addEventListener("keyup", (event) => {
+    if (event.key === "Enter") performSearch();
+});
+
+// Elements for Modal
+const addButton = document.getElementById("add-button");
+const addModal = document.getElementById("add-modal");
+const closeButton = document.querySelector(".close-button");
+
+// Show modal when Add button is clicked
+addButton.addEventListener("click", () => addModal.classList.add("show-modal"));
+
+// Hide modal when close button or area outside modal content is clicked
+closeButton.addEventListener("click", () => addModal.classList.remove("show-modal"));
+addModal.addEventListener("click", (event) => {
+    if (event.target === addModal) addModal.classList.remove("show-modal");
+});
+
+// Form submission for adding new category
+document.getElementById("add-category-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    console.log("Form submission started");
+
+    // Build the payload
+    const payload = {
+        _id: Date.now().toString(), // Temporary unique ID for example
+        name: document.getElementById("name").value,
+        description: document.getElementById("description").value,
+        favicon: document.getElementById("favicon").value,
+        examples: [
+            {
+                title: "Example",
+                code: document.getElementById("example").value
+            }
+        ]
+    };
+
+    console.log("Payload to be sent:", payload);
+
+    try {
+        // Send data to the server
+        const response = await fetch("http://localhost:8080/load_knowledge_data", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(payload)
+        });
+
+        if (response.ok) {
+            console.log("Data successfully sent to /load_knowledge_data");
+            alert("Category added successfully!");
+            addModal.classList.remove("show-modal");
+            document.getElementById("add-category-form").reset();
+        } else {
+            console.error("Failed to add category. Status:", response.status);
+        }
+    } catch (error) {
+        console.error("Error adding category:", error);
+    }
+});
+
+// Perform search by fetching data from the API using POST request
+async function performSearch() {
+    const query = searchInput.value.trim();
+    if (!query) {
+        searchResults.innerHTML = "Please enter a search term.";
+        searchResults.classList.add("show");
+        return;
+    }
+
+    console.log("Performing search with query:", query);
+
+    try {
+        // POST request to load knowledge data
+        const response = await fetch("http://localhost:8080/load_knowledge_data", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ query }) // Sending the search query as part of the body
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            console.log("Data fetched from API:", data);
+            renderResults(data);
+        } else {
+            console.error("Failed to fetch data. Status:", response.status);
+            searchResults.innerHTML = "Failed to load data.";
+        }
+    } catch (error) {
+        console.error("Error fetching data:", error);
+        searchResults.innerHTML = "Error loading data.";
+    }
+}
+
+// Render search results with dropdown and collapsible examples
+function renderResults(results) {
+    searchResults.innerHTML = "";  
+    searchResults.classList.add("show");
+
+    results.forEach(result => {
+        const resultItem = document.createElement("div");
+        resultItem.className = "result-item";
+
+        // Icon
+        const icon = document.createElement("img");
+        icon.className = "result-icon";
+        icon.src = result.favicon || "default-icon-path"; // Use a default icon if none provided
+        icon.alt = `${result.name} icon`;
+
+        // Content container
+        const content = document.createElement("div");
+
+        // Header
+        const header = document.createElement("div");
+        header.className = "result-header";
+        header.textContent = result.name;
+
+        // Description
+        const description = document.createElement("div");
+        description.className = "result-description";
+        description.textContent = result.description;
+
+        // Examples (collapsible)
+        const examples = document.createElement("div");
+        examples.className = "result-examples";
+        result.examples.forEach(example => {
+            const exampleTitle = document.createElement("p");
+            exampleTitle.textContent = example.title;
+
+            const exampleCode = document.createElement("pre");
+            exampleCode.textContent = example.code;
+
+            examples.appendChild(exampleTitle);
+            examples.appendChild(exampleCode);
+        });
+
+        // Toggle button for examples
+        const toggleButton = document.createElement("span");
+        toggleButton.className = "example-toggle";
+        toggleButton.textContent = "Show Examples";
+        toggleButton.addEventListener("click", () => {
+            examples.classList.toggle("show");
+            toggleButton.textContent = examples.classList.contains("show") ? "Hide Examples" : "Show Examples";
+        });
+
+        // Dropdown for Edit/Delete options
+        const dropdown = document.createElement("div");
+        dropdown.className = "result-dropdown";
+        dropdown.innerHTML = '⋮';
+        
+        const dropdownContent = document.createElement("div");
+        dropdownContent.className = "result-dropdown-content";
+        
+        const editOption = document.createElement("a");
+        editOption.href = "#";
+        editOption.textContent = "Edit";
+        
+        const deleteOption = document.createElement("a");
+        deleteOption.href = "#";
+        deleteOption.textContent = "Delete";
+        
+        dropdownContent.appendChild(editOption);
+        dropdownContent.appendChild(deleteOption);
+        dropdown.appendChild(dropdownContent);
+
+        // Append all parts to content container
+        content.appendChild(header);
+        content.appendChild(description);
+        content.appendChild(toggleButton);
+        content.appendChild(examples);
+
+        // Append icon, content, and dropdown to result item
+        resultItem.appendChild(icon);
+        resultItem.appendChild(content);
+        resultItem.appendChild(dropdown);
+
+        // Append result item to search results container
+        searchResults.appendChild(resultItem);
+    });
+}

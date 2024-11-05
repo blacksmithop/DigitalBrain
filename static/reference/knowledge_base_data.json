@@ -1,40 +1,42 @@
-{
-  "DevOpsTools": [
-    {
-      "name": "Docker",
-      "description": "Docker is a tool designed to make it easier to create, deploy, and run applications by using containers.",
-      "examples": [
-        {
-          "title": "Introduction to Docker",
-          "code": "# Introduction to Docker\nDocker is an open platform for developing, shipping, and running applications.\n\nDocker provides the ability to package and run an application in a loosely isolated environment called a container. Here is an example of how to run a Docker container:\n\n```bash\n# Pull an image\n$ docker pull ubuntu\n\n# Run a container\n$ docker run -it ubuntu\n```\n\nContainers are lightweight and share the host OS kernel but run in iDsolation."
-        },
-        {
-          "title": "Dockerfile Basics",
-          "code": "# Dockerfile Basics\nA Dockerfile is a text document that contains all the commands to assemble an image.\n\nHere is an example Dockerfile:\n\n```dockerfile\nFROM node:14\nWORKDIR /usr/src/app\nCOPY package*.json ./\nRUN npm install\nCOPY . .\nCMD [\"node\", \"app.js\"]\n```\n\nThis Dockerfile creates an image for a Node.js application. It installs dependencies, copies source code, and runs the app."
-        },
-        {
-          "title": "Docker Compose Basics",
-          "code": "# Docker Compose Basics\nDocker Compose is a tool for defining and running multi-container Docker applications.\n\nHere is an example `docker-compose.yml` file to run a web application and a database:\n\n```yaml\nversion: '3'\nservices:\n  web:\n    image: nginx\n    ports:\n      - \"8080:80\"\n  db:\n    image: postgres\n    environment:\n      POSTGRES_USER: example\n      POSTGRES_PASSWORD: example\n```\n\nThis example defines two services: a web server and a database."
-        }
-      ]
-    },
-    {
-      "name": "Git",
-      "description": "Git is a distributed version control system that tracks changes in source code during software development.",
-      "examples": [
-        {
-          "title": "Introduction to Git",
-          "code": "# Introduction to Git\nGit is a version control system that allows you to track changes to files and collaborate with others on software projects.\n\nHere are a few common Git commands:\n\n```bash\n# Initialize a new Git repository\n$ git init\n\n# Clone a repository\n$ git clone https://github.com/user/repo.git\n```\n\nThese commands are essential for setting up a Git project and collaborating with others."
-        },
-        {
-          "title": "Basic Git Commands",
-          "code": "# Basic Git Commands\nHere are some essential Git commands:\n\n```bash\n# Stage changes\n$ git add .\n\n# Commit changes\n$ git commit -m 'Commit message'\n\n# Push to remote\n$ git push origin main\n```\n\nThese commands allow you to track and share changes in your Git repository."
-        },
-        {
-          "title": "Branching in Git",
-          "code": "# Branching in Git\nBranching allows you to diverge from the main line of development and continue to work without affecting the main branch.\n\n```bash\n# Create a new branch\n$ git checkout -b new-feature\n\n# Switch to an existing branch\n$ git checkout main\n\n# Merge a branch into the main branch\n$ git merge new-feature\n```\n\nThis workflow is used to develop new features independently before merging them back into the main project."
-        }
-      ]
-    }
-  ]
-}
+[
+  {
+    "_id": "6729de7a3ef6107bbd175e40",
+    "favicon": "https://hub.docker.com/favicon.ico",
+    "name": "Docker",
+    "description": "Docker is a tool designed to make it easier to create, deploy, and run applications by using containers.",
+    "examples": [
+      {
+        "title": "Introduction to Docker",
+        "code": "# Introduction to Docker\nDocker is an open platform for developing, shipping, and running applications.\n\nDocker provides the ability to package and run an application in a loosely isolated environment called a container. Here is an example of how to run a Docker container:\n\n```bash\n# Pull an image\n$ docker pull ubuntu\n\n# Run a container\n$ docker run -it ubuntu\n```\n\nContainers are lightweight and share the host OS kernel but run in isolation."
+      },
+      {
+        "title": "Dockerfile Basics",
+        "code": "# Dockerfile Basics\nA Dockerfile is a text document that contains all the commands to assemble an image.\n\nHere is an example Dockerfile:\n\n```dockerfile\nFROM node:14\nWORKDIR /usr/src/app\nCOPY package*.json ./\nRUN npm install\nCOPY . .\nCMD [\"node\", \"app.js\"]\n```\n\nThis Dockerfile creates an image for a Node.js application. It installs dependencies, copies source code, and runs the app."
+      },
+      {
+        "title": "Docker Compose Basics",
+        "code": "# Docker Compose Basics\nDocker Compose is a tool for defining and running multi-container Docker applications.\n\nHere is an example `docker-compose.yml` file to run a web application and a database:\n\n```yaml\nversion: '3'\nservices:\n  web:\n    image: nginx\n    ports:\n      - \"8080:80\"\n  db:\n    image: postgres\n    environment:\n      POSTGRES_USER: example\n      POSTGRES_PASSWORD: example\n```\n\nThis example defines two services: a web server and a database."
+      }
+    ]
+  },
+  {
+    "_id": "6729de7a3ef6107bbd175e41",
+    "favicon": "https://git-scm.com/favicon.ico",
+    "name": "Git",
+    "description": "Git is a distributed version control system that tracks changes in source code during software development.",
+    "examples": [
+      {
+        "title": "Introduction to Git",
+        "code": "# Introduction to Git\nGit is a version control system that allows you to track changes to files and collaborate with others on software projects.\n\nHere are a few common Git commands:\n\n```bash\n# Initialize a new Git repository\n$ git init\n\n# Clone a repository\n$ git clone https://github.com/user/repo.git\n```\n\nThese commands are essential for setting up a Git project and collaborating with others."
+      },
+      {
+        "title": "Basic Git Commands",
+        "code": "# Basic Git Commands\nHere are some essential Git commands:\n\n```bash\n# Stage changes\n$ git add .\n\n# Commit changes\n$ git commit -m 'Commit message'\n\n# Push to remote\n$ git push origin main\n```\n\nThese commands allow you to track and share changes in your Git repository."
+      },
+      {
+        "title": "Branching in Git",
+        "code": "# Branching in Git\nBranching allows you to diverge from the main line of development and continue to work without affecting the main branch.\n\n```bash\n# Create a new branch\n$ git checkout -b new-feature\n\n# Switch to an existing branch\n$ git checkout main\n\n# Merge a branch into the main branch\n$ git merge new-feature\n```\n\nThis workflow is used to develop new features independently before merging them back into the main project."
+      }
+    ]
+  }
+]

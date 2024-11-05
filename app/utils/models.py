@@ -1,6 +1,6 @@
-from typing import List
+from typing import Optional, List
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field, field_validator
 
 
 class CategoryExample(BaseModel):
@@ -9,11 +9,21 @@ class CategoryExample(BaseModel):
 
 
 class Category(BaseModel):
-    id: int = 0
+    id: str = Field(alias="_id")
+    favicon: str = ""
     name: str
     description: str
-    examples: List[CategoryExample]
-
+    examples: Optional[List[CategoryExample]] = []
+    
+    @field_validator("id")
+    def convert_objectid(cls, v):
+       return str(v)
+   
+class AddCategory(BaseModel):
+    favicon: str = ""
+    name: str
+    description: str
+    examples: Optional[List[CategoryExample]] = []
 
 class DeleteCategory(BaseModel):
-    id: int
+    id: str

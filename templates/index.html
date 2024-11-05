@@ -3,54 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Knowledge Base Directory</title>
-    <!-- SimpleMDE Markdown Editor -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
-    <!-- Custom CSS for styling -->
+    <title>Knowledge Repo</title>
     <link href="{{ url_for('static', path='/assets/css/styles.css') }}" rel="stylesheet">
+    <link rel="icon" href="path-to-default-icon/favicon.ico"> <!-- Update with a default icon -->
 </head>
 <body>
     <header>
-        <div class="header-content">
-            <h1>Knowledge Base Directory</h1>
-            <div class="user-dropdown">
-                <div class="user-icon">👤</div>
-                <div class="dropdown-content">
-                    <a href="#">Logout</a>
-                </div>
+        <h1>Knowledge Repo</h1>
+        <nav>
+            <button class="dropdown-btn">Menu ▼</button>
+            <div class="dropdown-content">
+                <a href="#source1">Source 1</a>
+                <a href="#source2">Source 2</a>
+                <a href="#source3">Source 3</a>
             </div>
-        </div>
+        </nav>
     </header>
 
     <main>
-        <div class="container">
-            <div class="search-container">
-                <!-- Replaced "Add" with a plus icon -->
-                <button id="add-button" class="add-button">➕</button>
-                <input type="text" class="search-input" placeholder="Search...">
-                <button class="search-btn">🔍</button>
-            </div>
-
-            <div id="editor-container" style="display:none;">
-                <input type="text" id="title-input" placeholder="Enter title" class="title-input">
-                <textarea id="markdown-editor"></textarea>
-                <button id="preview-button" class="editor-btn">Preview</button>
-                <button id="save-button" class="editor-btn">Save</button>
-            </div>
-
-            <div id="knowledge-base"></div>
+        <div class="search-container">
+            <button id="add-button">Add</button>
+            <input type="text" id="search-input" placeholder="Enter search query...">
+            <button id="search-button">Search</button>
         </div>
+        <div id="search-results" class="hidden"></div>
     </main>
 
-    <footer>
-        <p>© 2024 My Minimal Website</p>
-    </footer>
+    <!-- Modal for adding new categories -->
+    <div id="add-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Add New Category</h2>
+            <form id="add-category-form">
+                <label for="name">Name:</label>
+                <input type="text" id="name" required>
+                
+                <label for="description">Description:</label>
+                <textarea id="description" required></textarea>
+                
+                <label for="example">Example Code:</label>
+                <textarea id="example" required></textarea>
+                
+                <label for="favicon">Favicon URL:</label>
+                <input type="url" id="favicon" placeholder="http://example.com/favicon.ico" required>
+                
+                <button type="submit">Add Category</button>
+            </form>
+        </div>
+    </div>
 
-    <!-- SimpleMDE Markdown Editor Script -->
-    <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
-    <!-- Marked.js Script for Markdown Parsing -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/3.0.4/marked.min.js"></script>
-    <!-- Custom JavaScript -->
+    <footer>
+        <p>Knowledge Repo © 2024</p>
+    </footer>
     <script src="{{ url_for('static', path='/assets/js/script.js') }}"></script>
 </body>
 </html>
