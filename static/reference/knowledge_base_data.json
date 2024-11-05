@@ -1,5 +1,7 @@
 [
   {
+    "_id": "6729de7a3ef6107bbd175e40",
+    "favicon": "https://hub.docker.com/favicon.ico",
     "name": "Docker",
     "description": "Docker is a tool designed to make it easier to create, deploy, and run applications by using containers.",
     "examples": [
@@ -18,6 +20,8 @@
     ]
   },
   {
+    "_id": "6729de7a3ef6107bbd175e41",
+    "favicon": "https://git-scm.com/favicon.ico",
     "name": "Git",
     "description": "Git is a distributed version control system that tracks changes in source code during software development.",
     "examples": [
