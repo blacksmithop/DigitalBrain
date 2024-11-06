@@ -6,15 +6,19 @@ dropdownBtn.addEventListener("click", () => {
     dropdownContent.classList.toggle("show");
 });
 
-// Search Button Click and Animation
-const searchButton = document.getElementById("search-button");
-const searchInput = document.getElementById("search-input");
-const searchResults = document.getElementById("search-results");
-
-searchButton.addEventListener("click", () => performSearch());
-searchInput.addEventListener("keyup", (event) => {
-    if (event.key === "Enter") performSearch();
-});
+// Fetch categories on page load
+async function loadCategories() {
+    try {
+        const response = await fetch("http://localhost:8080/list_category", { method: "GET" });
+        if (response.ok) {
+            const categories = await response.json();
+            renderResults(categories);
+        }
+    } catch (error) {
+        console.error("Error loading categories:", error);
+    }
+}
+document.addEventListener("DOMContentLoaded", loadCategories);
 
 // Elements for Modal
 const addButton = document.getElementById("add-button");
@@ -33,11 +37,9 @@ addModal.addEventListener("click", (event) => {
 // Form submission for adding new category
 document.getElementById("add-category-form").addEventListener("submit", async (e) => {
     e.preventDefault();
-    console.log("Form submission started");
 
-    // Build the payload
     const payload = {
-        _id: Date.now().toString(), // Temporary unique ID for example
+        _id: Date.now().toString(),
         name: document.getElementById("name").value,
         description: document.getElementById("description").value,
         favicon: document.getElementById("favicon").value,
@@ -49,20 +51,14 @@ document.getElementById("add-category-form").addEventListener("submit", async (e
         ]
     };
 
-    console.log("Payload to be sent:", payload);
-
     try {
-        // Send data to the server
         const response = await fetch("http://localhost:8080/load_knowledge_data", {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payload)
         });
 
         if (response.ok) {
-            console.log("Data successfully sent to /load_knowledge_data");
             alert("Category added successfully!");
             addModal.classList.remove("show-modal");
             document.getElementById("add-category-form").reset();
@@ -83,28 +79,20 @@ async function performSearch() {
         return;
     }
 
-    console.log("Performing search with query:", query);
-
     try {
-        // POST request to load knowledge data
-        const response = await fetch("http://localhost:8080/load_knowledge_data", {
+        const response = await fetch("http://localhost:8080/search_by_category", {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ query }) // Sending the search query as part of the body
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ query })
         });
 
         if (response.ok) {
             const data = await response.json();
-            console.log("Data fetched from API:", data);
             renderResults(data);
         } else {
-            console.error("Failed to fetch data. Status:", response.status);
             searchResults.innerHTML = "Failed to load data.";
         }
     } catch (error) {
-        console.error("Error fetching data:", error);
         searchResults.innerHTML = "Error loading data.";
     }
 }
