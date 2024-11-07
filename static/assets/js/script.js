@@ -6,19 +6,21 @@ dropdownBtn.addEventListener("click", () => {
     dropdownContent.classList.toggle("show");
 });
 
-// Fetch categories on page load
+// Fetch categories on page load (list_category)
 async function loadCategories() {
     try {
         const response = await fetch("http://localhost:8080/list_category", { method: "GET" });
         if (response.ok) {
             const categories = await response.json();
-            renderResults(categories);
+            renderResults(categories);  // Display categories by default
+        } else {
+            console.error("Failed to load categories");
         }
     } catch (error) {
         console.error("Error loading categories:", error);
     }
 }
-document.addEventListener("DOMContentLoaded", loadCategories);
+document.addEventListener("DOMContentLoaded", loadCategories); // Called by default on page load
 
 // Elements for Modal
 const addButton = document.getElementById("add-button");
@@ -39,20 +41,17 @@ document.getElementById("add-category-form").addEventListener("submit", async (e
     e.preventDefault();
 
     const payload = {
-        _id: Date.now().toString(),
         name: document.getElementById("name").value,
         description: document.getElementById("description").value,
         favicon: document.getElementById("favicon").value,
-        examples: [
-            {
-                title: "Example",
-                code: document.getElementById("example").value
-            }
-        ]
+        examples: {
+            title: document.getElementById("example-title").value,
+            code: document.getElementById("example-code").value
+        }
     };
 
     try {
-        const response = await fetch("http://localhost:8080/load_knowledge_data", {
+        const response = await fetch("http://localhost:8080/add_category", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payload)
@@ -62,6 +61,7 @@ document.getElementById("add-category-form").addEventListener("submit", async (e
             alert("Category added successfully!");
             addModal.classList.remove("show-modal");
             document.getElementById("add-category-form").reset();
+            loadCategories(); // Reload categories after adding
         } else {
             console.error("Failed to add category. Status:", response.status);
         }
@@ -70,12 +70,11 @@ document.getElementById("add-category-form").addEventListener("submit", async (e
     }
 });
 
-// Perform search by fetching data from the API using POST request
+// Perform search by fetching data from the API using POST request (search_by_category)
 async function performSearch() {
-    const query = searchInput.value.trim();
+    const query = document.getElementById("search-input").value.trim();
     if (!query) {
-        searchResults.innerHTML = "Please enter a search term.";
-        searchResults.classList.add("show");
+        loadCategories();  // If no search term, reload all categories
         return;
     }
 
@@ -88,17 +87,21 @@ async function performSearch() {
 
         if (response.ok) {
             const data = await response.json();
-            renderResults(data);
+            renderResults(data);  // Render search results
         } else {
-            searchResults.innerHTML = "Failed to load data.";
+            console.error("Failed to perform search");
         }
     } catch (error) {
-        searchResults.innerHTML = "Error loading data.";
+        console.error("Error loading search data:", error);
     }
 }
 
+// Attach search function to search button
+document.getElementById("search-button").addEventListener("click", performSearch);
+
 // Render search results with dropdown and collapsible examples
 function renderResults(results) {
+    const searchResults = document.getElementById("search-results");
     searchResults.innerHTML = "";  
     searchResults.classList.add("show");
 
@@ -128,16 +131,15 @@ function renderResults(results) {
         // Examples (collapsible)
         const examples = document.createElement("div");
         examples.className = "result-examples";
-        result.examples.forEach(example => {
-            const exampleTitle = document.createElement("p");
-            exampleTitle.textContent = example.title;
+        
+        const exampleTitle = document.createElement("p");
+        exampleTitle.textContent = result.examples.title;
 
-            const exampleCode = document.createElement("pre");
-            exampleCode.textContent = example.code;
+        const exampleCode = document.createElement("pre");
+        exampleCode.textContent = result.examples.code;
 
-            examples.appendChild(exampleTitle);
-            examples.appendChild(exampleCode);
-        });
+        examples.appendChild(exampleTitle);
+        examples.appendChild(exampleCode);
 
         // Toggle button for examples
         const toggleButton = document.createElement("span");
@@ -151,18 +153,21 @@ function renderResults(results) {
         // Dropdown for Edit/Delete options
         const dropdown = document.createElement("div");
         dropdown.className = "result-dropdown";
-        dropdown.innerHTML = '⋮';
+        
+        const dropdownIcon = document.createElement("i");
+        dropdownIcon.className = "fas fa-ellipsis-v"; // FontAwesome icon for dropdown
+        dropdown.appendChild(dropdownIcon);
         
         const dropdownContent = document.createElement("div");
         dropdownContent.className = "result-dropdown-content";
         
         const editOption = document.createElement("a");
         editOption.href = "#";
-        editOption.textContent = "Edit";
+        editOption.innerHTML = `<i class="fas fa-edit"></i> Edit`; // FontAwesome edit icon
         
         const deleteOption = document.createElement("a");
         deleteOption.href = "#";
-        deleteOption.textContent = "Delete";
+        deleteOption.innerHTML = `<i class="fas fa-trash-alt"></i> Delete`; // FontAwesome delete icon
         
         dropdownContent.appendChild(editOption);
         dropdownContent.appendChild(deleteOption);
