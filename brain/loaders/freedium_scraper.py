@@ -1,6 +1,6 @@
 from langchain_community.document_loaders import AsyncChromiumLoader
 from bs4 import BeautifulSoup
-# from utils import token_splitter
+from utils import token_splitter
 from os import environ
 import re
 
