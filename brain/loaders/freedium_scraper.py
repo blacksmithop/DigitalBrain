@@ -35,8 +35,7 @@ def scrape_with_playwright(url):
     article_content = " ".join(cleaned_content)
     return article_content
 
-
-if __name__ == "__main__":
-    url = "https://freedium.cfd/https://medium.com/p/6ed96005c81f"
+def scrape_medium_url(medium_url: str):
+    url = f"https://freedium.cfd/{medium_url}"
     extracted_content = scrape_with_playwright(url)
     print(extracted_content)
