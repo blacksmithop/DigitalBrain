@@ -38,4 +38,4 @@ def scrape_with_playwright(url):
 def scrape_medium_url(medium_url: str):
     url = f"https://freedium.cfd/{medium_url}"
     extracted_content = scrape_with_playwright(url)
-    print(extracted_content)
+    return extracted_content
