@@ -6,7 +6,7 @@ from utils import scrape_medium_url
 from os import path, makedirs
 from pydantic import TypeAdapter
 from typing import TypeAlias
-
+from json import dump
 
 
 # URL of the RSS feed
@@ -59,8 +59,11 @@ class MediumLoader:
         UserList: TypeAlias = list[MediumArticle]
         UserListModel = TypeAdapter(UserList)
         json_content = UserListModel.dump_json(articles)
-        print(json_content)
-    
+
+        file_path = path.join(target_directory, "medium_data.json")
+        with open(file_path, "w") as f:
+            dump(json_content, f)
+            
     def initalize(self, username: str):
         # Fetch and parse the feed
         try:
