@@ -1,12 +1,13 @@
 import requests
 import xml.etree.ElementTree as ET
-from brain import MediumArticle
+from brain.models import MediumArticle
 from typing import List
-from utils import scrape_medium_url
+from brain.utils import scrape_medium_url
 from os import path, makedirs
 from pydantic import TypeAdapter
 from typing import TypeAlias
 from json import dump
+import logging
 
 
 # URL of the RSS feed
@@ -49,8 +50,9 @@ class MediumLoader:
             try:
                 article_content = scrape_medium_url(medium_url=perma_link)
                 article.content = article_content
+                logging.info(type(article_content))
             except Exception as e:
-                print(e)
+                logging.info(e)
         return articles
     
     def save_medium_content(self, articles: List[MediumArticle], target_directory: str = "./hippocampus/medium"):
@@ -69,9 +71,11 @@ class MediumLoader:
         try:
             author_feed_url = f"{RSS_FEED_URL}/@{username}"
             feed_content = self.fetch_rss_feed(author_feed_url)
+            # print(feed_content)
             articles = self.get_medium_articles(feed_content) # TODO: Leverage passing mutliple urls to AsyncChromiumLoader
+            logging.info(f"Article: {articles[0]}")
             article_with_content = self.get_article_content(articles=articles)
-            self.save_medium_content(articles=article_with_content)
+            # self.save_medium_content(articles=article_with_content)
         except Exception as e:
             print(f"Error: {e}")
 

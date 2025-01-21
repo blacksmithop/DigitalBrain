@@ -1,6 +1,5 @@
 from fastapi import APIRouter, HTTPException
 from brain import GithubLoader, GithubDownload
-import requests
 
 # Initialize the GitHub router
 github_router = APIRouter(prefix="/github", tags=["GitHub"])

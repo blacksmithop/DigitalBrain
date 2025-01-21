@@ -1,5 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from brain import MediumLoader, MediumDownload
+import logging
+
 
 # Initialize the GitHub router
 medium_router = APIRouter(prefix="/medium", tags=["Medium"])
@@ -12,5 +14,8 @@ def get_repositories(data: MediumDownload):
     - username: Medium username
     """
     medium_loader = MediumLoader()
-    medium_loader.initalize(username=data.username)
+    try:
+        medium_loader.initalize(username=data.username)
+    except Exception as e:
+        logging.info(e)
     return "Downloading medium data"
