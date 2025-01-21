@@ -7,3 +7,6 @@ class MediumArticle(BaseModel):
     publication_date: str
     perma_link: str
     content: Optional[str] = None
+
+class MediumDownload(BaseModel):
+    username: str

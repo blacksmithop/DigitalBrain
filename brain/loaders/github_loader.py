@@ -10,7 +10,7 @@ from rich.console import Console
 console = Console()
 
 
-class Github:
+class GithubLoader:
     def __init__(self, token: Optional[str] = None):
         self.user_authenticated = False
 

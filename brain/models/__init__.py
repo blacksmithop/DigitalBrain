@@ -1,2 +1,2 @@
 from .github import GithubRepo, GithubDownload
-from .medium import MediumArticle
+from .medium import MediumArticle, MediumDownload

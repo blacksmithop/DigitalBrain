@@ -1,1 +1,2 @@
-from .github_loader import Github
+from .github_loader import GithubLoader
+from .medium_loader import MediumLoader
